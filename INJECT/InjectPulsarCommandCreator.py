@@ -214,32 +214,32 @@ class InjectPulsarCommandCreator:
         #   Print command line arguments & Run
         # ****************************************
 
-        print "\n\t**************************"
-        print "\t| Command Line Arguments |"
-        print "\t**************************"
-        print "\tDebug:",self.verbose
-        print "\tAsc directory path:",self.ascDir
-        print "\tPredictor file directory path:",self.predDir
-        print "\tFilterbank file path:",self.filFilePath
-        print "\tFrequency range:", self.frequency , " ( +/- " , self.buffer , " )"
-        print "\tOutput directory:", self.outputDir
-        print "\tCommand batch size:", self.batch
-        print "\tRandom seed:",self.seed
-        print "\n\tChecking user supplied parameters..."
+        print("\n\t**************************")
+        print("\t| Command Line Arguments |")
+        print("\t**************************")
+        print("\tDebug:",self.verbose)
+        print("\tAsc directory path:",self.ascDir)
+        print("\tPredictor file directory path:",self.predDir)
+        print("\tFilterbank file path:",self.filFilePath)
+        print("\tFrequency range:", self.frequency , " ( +/- " , self.buffer , " )")
+        print("\tOutput directory:", self.outputDir)
+        print("\tCommand batch size:", self.batch)
+        print("\tRandom seed:",self.seed)
+        print("\n\tChecking user supplied parameters...")
 
         # First check user has supplied a asc directory path ...
         if(not self.ascDir):
-            print "\n\tYou must supply a valid par file directory via the --par flag."
+            print("\n\tYou must supply a valid par file directory via the --par flag.")
             sys.exit()
 
         # Now check user has supplied a predictor file output directory path ...
         if(not self.predDir):
-            print "\n\tYou must supply a valid predictor file directory via the --pred flag."
+            print("\n\tYou must supply a valid predictor file directory via the --pred flag.")
             sys.exit()
 
         # Check the filterbank file containing noise exists...
         if(os.path.exists(self.filFilePath) == False):
-            print "\n\tYou must supply a valid filterbank file via the --noise flag."
+            print("\n\tYou must supply a valid filterbank file via the --noise flag.")
             sys.exit()
 
         # Now the user may have supplied an output directory path, but it may
@@ -250,39 +250,39 @@ class InjectPulsarCommandCreator:
             try:
                 os.makedirs(self.outputDir)
             except OSError as exception:
-                print "\n\tException encountered trying to create output file directory - Exiting!"
+                print("\n\tException encountered trying to create output file directory - Exiting!")
                 sys.exit()
 
         # If the directory creation call above did not fail, the output directory
         # should now exist. Check that this is the case...
         if(os.path.isdir(self.outputDir) == False):
-            print "\n\tOutput file directory invalid - Exiting!"
+            print("\n\tOutput file directory invalid - Exiting!")
             sys.exit()
 
         # Check the buffer value supplied by the user...
         if(self.seed < 0):
-            print "\n\tSupplied seed value invalid - Exiting!"
-            print "\tExiting..."
+            print("\n\tSupplied seed value invalid - Exiting!")
+            print("\tExiting...")
             sys.exit()
 
         # Check the frequency value supplied by the user...
         if(self.frequency < 0):
-            print "\n\tSupplied frequency value invalid - Exiting!"
+            print("\n\tSupplied frequency value invalid - Exiting!")
             sys.exit()
 
         # Check the buffer value supplied by the user...
         if(self.buffer < 0):
-            print "\n\tSupplied buffer value invalid - Exiting!"
+            print("\n\tSupplied buffer value invalid - Exiting!")
             sys.exit()
 
         if(self.batch < 0):
-            print "\n\tSupplied batch value invalid - Exiting!"
+            print("\n\tSupplied batch value invalid - Exiting!")
             sys.exit()
 
         # Now seed random number generator
         random.seed(seed=self.seed)
 
-        print "\tFinished checking supplied parameters..."
+        print("\tFinished checking supplied parameters...")
 
         # ****************************************
         #
@@ -294,9 +294,9 @@ class InjectPulsarCommandCreator:
         #
         # ****************************************
 
-        print "\n\n\t*****************************"
-        print "\t| Parsing input directories |"
-        print "\t*****************************"
+        print("\n\n\t*****************************")
+        print("\t| Parsing input directories |")
+        print("\t*****************************")
 
         # ****************************************
         #          Parse ASC files
@@ -306,7 +306,7 @@ class InjectPulsarCommandCreator:
         # specified by the user, then attempts to use those file paths to create
         # an inject command.
         #
-        print "\tLooking for asc files..."
+        print("\tLooking for asc files...")
 
         ascPaths       = {}
         ascFilesProcessed = 0
@@ -334,16 +334,16 @@ class InjectPulsarCommandCreator:
 
                         # Debugging
                         if(self.verbose):
-                            print "\t\tPulsar: ",pulsarName , "\tFreq: ", freq, "\tFile: " , filename
+                            print("\t\tPulsar: ",pulsarName , "\tFreq: ", freq, "\tFile: " , filename)
 
                         if(freq >= frequencyLowerBound and freq <= frequencyUpperBound):
                             if(self.verbose):
-                                print "\t\t\tPulsar: ", pulsarName,  " in the correct frequency range"
+                                print("\t\t\tPulsar: ", pulsarName,  " in the correct frequency range")
                             # Inject pulsar if in desired frequency range
                             ascPaths[pulsarName] = path
 
-        print "\tASC files processed: ", ascFilesProcessed
-        print "\tASC files meeting frequency criteria: ", len(ascPaths)
+        print("\tASC files processed: ", ascFilesProcessed)
+        print("\tASC files meeting frequency criteria: ", len(ascPaths))
 
         # ****************************************
         #          Parse Predictor files
@@ -353,7 +353,7 @@ class InjectPulsarCommandCreator:
         # specified by the user, then attempts to use those file paths to create
         # an inject command.
         #
-        print "\n\tLooking for Predictor files..."
+        print("\n\tLooking for Predictor files...")
 
         pulsarPredPaths = {}
         fakePulsarPredPaths = {}
@@ -375,7 +375,7 @@ class InjectPulsarCommandCreator:
                         else:
                             pulsarPredPaths[name] = path
 
-        print "\tPredictor files found: ", str(len(pulsarPredPaths) + len(fakePulsarPredPaths))
+        print("\tPredictor files found: ", str(len(pulsarPredPaths) + len(fakePulsarPredPaths)))
 
         # ****************************************
         #
@@ -387,11 +387,11 @@ class InjectPulsarCommandCreator:
         #
         # ****************************************
 
-        print "\n\n\t*****************************"
-        print "\t|  Creating inject commands |"
-        print "\t*****************************"
+        print("\n\n\t*****************************")
+        print("\t|  Creating inject commands |")
+        print("\t*****************************")
 
-        print "\tCreating inject_pulsar commands..."
+        print("\tCreating inject_pulsar commands...")
         commandCount = 0
         commandBatchCount = 1
 
@@ -402,7 +402,7 @@ class InjectPulsarCommandCreator:
 
         # FIRST we process the predictor files belonging to real pulsars.
         # For each asc file...
-        for key, value in ascPaths.iteritems():
+        for key, value in ascPaths.items():
             # Get the predictor file path if it exists...
             predictor = pulsarPredPaths.get(key)
 
@@ -412,7 +412,7 @@ class InjectPulsarCommandCreator:
                 continue
 
             if(self.verbose):
-                print "\tkey: ", key, " value: ", value, " Predictor: ", predictor
+                print("\tkey: ", key, " value: ", value, " Predictor: ", predictor)
 
             # inject_pulsar inputs:
             #
@@ -439,7 +439,7 @@ class InjectPulsarCommandCreator:
             command = "inject_pulsar --snr 15 --seed " + str(self.seed) + " --pred " + predictor + " --prof " + value + " " + self.filFilePath + " > output.fil"
 
             if(self.verbose):
-                print "\tCommand ",command , " : " , command
+                print("\tCommand ",command , " : " , command)
 
             # Write the command to the output file.
             commandCount +=1
@@ -466,7 +466,7 @@ class InjectPulsarCommandCreator:
         # Get the keys in the asc path dictionary
         ascKeys = list(ascPaths.keys())
 
-        for key, value in fakePulsarPredPaths.iteritems():
+        for key, value in fakePulsarPredPaths.items():
 
             # choose a random asc file key
             random_index = random.randint(0, len(ascKeys))
@@ -478,7 +478,7 @@ class InjectPulsarCommandCreator:
                 continue
 
             if(self.verbose):
-                print "\tkey: ", key, " value: ", value, " ASC: ", asc
+                print("\tkey: ", key, " value: ", value, " ASC: ", asc)
 
             # For fake pulsars, we have a pre-computed target SNR. Here we extract it
             # from the name of the fakse pulsar, which is in a pre-determined format:
@@ -517,7 +517,7 @@ class InjectPulsarCommandCreator:
             command = "inject_pulsar --snr " + SNR + " --seed " + str(self.seed) + " --pred " + value + " --prof " + asc + " " + self.filFilePath + " > output.fil"
 
             if(self.verbose):
-                print "\tCommand ",command , " : " , command
+                print("\tCommand ",command , " : " , command)
 
             # Write the command to the output file.
             commandCount +=1
@@ -539,10 +539,10 @@ class InjectPulsarCommandCreator:
             self.appendToFile(commandFilePath,command+"\n")
 
 
-        print "\n\tCommands created: ", commandCount
+        print("\n\tCommands created: ", commandCount)
 
-        print "\n\tDone."
-        print "\t**************************************************************************" # Used only for formatting purposes.
+        print("\n\tDone.")
+        print("\t**************************************************************************") # Used only for formatting purposes.
 
     # ****************************************************************************************************
 

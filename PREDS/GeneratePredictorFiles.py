@@ -266,53 +266,53 @@ class GeneratePredictorFiles:
         #   Print command line arguments & Run
         # ****************************************
 
-        print "\n\t**************************"
-        print "\t| Command Line Arguments |"
-        print "\t**************************"
-        print "\tDebug:",self.verbose
-        print "\tPar directory path:",self.parDir
-        print "\tOutput directory path:",self.outputDir
-        print "\tSegment length:",self.obsLength
-        print "\tF1 value:",self.f1
-        print "\tF2 value:",self.f2
-        print "\tNumber of time coeffs:",self.tcoeff
-        print "\tNumber of freq. coeffs:",self.fcoeff
-        print "\tMJD 1:",self.mjd1
-        print "\tMJD 2:",self.mjd2
-        print "\tBatch size:",self.batch
+        print("\n\t**************************")
+        print("\t| Command Line Arguments |")
+        print("\t**************************")
+        print("\tDebug:",self.verbose)
+        print("\tPar directory path:",self.parDir)
+        print("\tOutput directory path:",self.outputDir)
+        print("\tSegment length:",self.obsLength)
+        print("\tF1 value:",self.f1)
+        print("\tF2 value:",self.f2)
+        print("\tNumber of time coeffs:",self.tcoeff)
+        print("\tNumber of freq. coeffs:",self.fcoeff)
+        print("\tMJD 1:",self.mjd1)
+        print("\tMJD 2:",self.mjd2)
+        print("\tBatch size:",self.batch)
 
         # Check the buffer value supplied by the user...
         if(self.obsLength <= 0):
-            print "\n\tSupplied observation length invalid - Exiting!"
+            print("\n\tSupplied observation length invalid - Exiting!")
             sys.exit()
 
         if(self.f1 <= 0):
-            print "\n\tSupplied f1 value invalid - Exiting!"
+            print("\n\tSupplied f1 value invalid - Exiting!")
             sys.exit()
 
         if(self.f2 <= 0):
-            print "\n\tSupplied f2 value invalid - Exiting!"
+            print("\n\tSupplied f2 value invalid - Exiting!")
             sys.exit()
 
         if(self.tcoeff <= 0):
-            print "\n\tSupplied number of time coefficicents invalid - Exiting!"
+            print("\n\tSupplied number of time coefficicents invalid - Exiting!")
             sys.exit()
 
         if(self.fcoeff <= 0):
-            print "\n\tSupplied number of time coefficicents invalid - Exiting!"
-            print "\tExiting..."
+            print("\n\tSupplied number of time coefficicents invalid - Exiting!")
+            print("\tExiting...")
             sys.exit()
 
         # First check user has supplied a par directory path ...
         if(not self.parDir):
-            print "\n\tYou must supply a valid par directory file via the -p flag."
-            print "\tExiting..."
+            print("\n\tYou must supply a valid par directory file via the -p flag.")
+            print("\tExiting...")
             sys.exit()
 
         # Now check user has supplied a predictor file output directory path ...
         if(not self.outputDir):
-            print "\n\tYou must supply a valid output directory file via the -d flag."
-            print "\tExiting..."
+            print("\n\tYou must supply a valid output directory file via the -d flag.")
+            print("\tExiting...")
             sys.exit()
 
         # Now the user may have supplied an output directory path, but it may
@@ -323,7 +323,7 @@ class GeneratePredictorFiles:
             try:
                 os.makedirs(self.outputDir)
             except OSError as exception:
-                print "\n\tException encountered trying to create par file output directory - Exiting!"
+                print("\n\tException encountered trying to create par file output directory - Exiting!")
                 sys.exit()
 
         self.pulsarPredictorFileDir = self.outputDir + "/Pulsar"
@@ -332,7 +332,7 @@ class GeneratePredictorFiles:
         # If the directory creation call above did not fail, the output directory
         # should now exist. Check that this is the case...
         if(os.path.isdir(self.outputDir) == False):
-            print "\n\tPredictor file output directory invalid - Exiting!"
+            print("\n\tPredictor file output directory invalid - Exiting!")
             sys.exit()
         else:
             # Create new output directories
@@ -360,7 +360,7 @@ class GeneratePredictorFiles:
         # specified by the use, then attempts to use those file paths to create
         # a TEMPO2 predictor file...
         #
-        print "\n\tLooking for PAR files...\n\n"
+        print("\n\tLooking for PAR files...\n\n")
         parCount = 0
         fakePulsarErrors = 0
         pulsarParErrors = 0
@@ -386,7 +386,7 @@ class GeneratePredictorFiles:
                     if(ext in path):
 
                         name = filename.replace(ext,"")
-                        print "\tPath: ", path , " Filename: ",name
+                        print("\tPath: ", path , " Filename: ",name)
 
 
                         fakePulsarDestPath = self.fakePulsarPredictorFileDir + "/" + name + ".dat"
@@ -444,7 +444,7 @@ class GeneratePredictorFiles:
                             else:
                                 # The expected t2pred.dat file does not exist - tempo2 must have
                                 # encountered some problem. Tell the user...
-                                print "\tError generating predictor file for par: ", path
+                                print("\tError generating predictor file for par: ", path)
 
                                 # Update error counting stats.
                                 if("FakePulsar_" in name):
@@ -457,15 +457,15 @@ class GeneratePredictorFiles:
 
         noisePars = fakePulsarErrors + fakePulsarSuccesses
         pulsarPars = pulsarParErrors + pulsarParSuccesses
-        print "\n\tFake Pulsar Par files found: " + str(noisePars)
-        print "\tPulsar Par files found: " + str(pulsarPars)
-        print "\tFake pulsar Par errors (predictor file creation) : " + str(fakePulsarErrors)
-        print "\tPulsar Par errors (predictor file creation): " + str(pulsarParErrors)
-        print "\tFake pulsar Par successes (predictor file creation) : " + str(fakePulsarSuccesses)
-        print "\tPulsar Par successes (predictor file creation): " + str(pulsarParSuccesses), "\n\n"
-        print "\tExecution time: ", str(end - start)
-        print "\n\tDone."
-        print "\t**************************************************************************" # Used only for formatting purposes.
+        print("\n\tFake Pulsar Par files found: " + str(noisePars))
+        print("\tPulsar Par files found: " + str(pulsarPars))
+        print("\tFake pulsar Par errors (predictor file creation) : " + str(fakePulsarErrors))
+        print("\tPulsar Par errors (predictor file creation): " + str(pulsarParErrors))
+        print("\tFake pulsar Par successes (predictor file creation) : " + str(fakePulsarSuccesses))
+        print("\tPulsar Par successes (predictor file creation): " + str(pulsarParSuccesses), "\n\n")
+        print("\tExecution time: ", str(end - start))
+        print("\n\tDone.")
+        print("\t**************************************************************************") # Used only for formatting purposes.
 
     # ****************************************************************************************************
 

@@ -293,8 +293,8 @@ class ATNFDataExtractor:
         self.outputPath = args.outputPath
 
         if(self.outputPath == "EMPTY"):
-            print "\n\tYou must supply a valid output file via the -w flag."
-            print "\tExiting..."
+            print("\n\tYou must supply a valid output file via the -w flag.")
+            print("\tExiting...")
             sys.exit()
 
         # Clear the output file of text.
@@ -399,24 +399,24 @@ class ATNFDataExtractor:
 
             self.catalogueFile.close()
         else:
-            print "Catalog file not found at: ", self.atnfCatalogPath
-            print "\tYou must supply a valid catalog file via the -p flag."
-            print "\tExiting..."
+            print("Catalog file not found at: ", self.atnfCatalogPath)
+            print("\tYou must supply a valid catalog file via the -p flag.")
+            print("\tExiting...")
 
         # ****************************************
         #   Print command line arguments & Run
         # ****************************************
 
-        print "\n\t**************************"
-        print "\t| Command Line Arguments |"
-        print "\t**************************"
-        print "\tDebug:",self.verbose
-        print "\tPulsar catalog file path:",self.atnfCatalogPath
+        print("\n\t**************************")
+        print("\t| Command Line Arguments |")
+        print("\t**************************")
+        print("\tDebug:",self.verbose)
+        print("\tPulsar catalog file path:",self.atnfCatalogPath)
 
-        print "\tDone."
+        print("\tDone.")
 
         # Used only for formatting purposes.
-        print "\t**************************************************************************"
+        print("\t**************************************************************************")
 
     # ****************************************************************************************************
 

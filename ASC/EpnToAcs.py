@@ -188,24 +188,24 @@ class EpnToAsc:
         #   Print command line arguments & Run
         # ****************************************
 
-        print "\n\t**************************"
-        print "\t| Command Line Arguments |"
-        print "\t**************************"
-        print "\tDebug:",self.verbose
-        print "\tEPN file input directory:",self.epnPath
-        print "\tASC file output directory:",self.outputDir
+        print("\n\t**************************")
+        print("\t| Command Line Arguments |")
+        print("\t**************************")
+        print("\tDebug:",self.verbose)
+        print("\tEPN file input directory:",self.epnPath)
+        print("\tASC file output directory:",self.outputDir)
 
         # First check user has supplied an EPN input director path ...
         if(not self.outputDir):
-            print "\n\tYou must supply a valid EPN input directory file via the -e flag."
-            print "\tExiting..."
+            print("\n\tYou must supply a valid EPN input directory file via the -e flag.")
+            print("\tExiting...")
             sys.exit()
         else:
             # User has passed in an input directory, now we need to check that
             # it is valid.
             if(os.path.exists(self.epnPath) == False):
-                print "\n\tSupplied EPN input directory invalid!"
-                print "\tExiting..."
+                print("\n\tSupplied EPN input directory invalid!")
+                print("\tExiting...")
                 sys.exit()
 
         # Now the user may have supplied an output directory path, but it may
@@ -216,13 +216,13 @@ class EpnToAsc:
             try:
                 os.makedirs(self.outputDir)
             except OSError as exception:
-                print "\n\tException encountered trying to create ACN file output directory - Exiting!"
+                print("\n\tException encountered trying to create ACN file output directory - Exiting!")
                 sys.exit()
 
         # If the directory creation call above did not fail, the output directory
         # should now exist. Check that this is the case...
         if(os.path.isdir(self.outputDir) == False):
-            print "\n\tACN file output directory invalid - Exiting!"
+            print("\n\tACN file output directory invalid - Exiting!")
             sys.exit()
 
         # Now we know the input files exist...
@@ -233,7 +233,7 @@ class EpnToAsc:
 
         # Read parsed pulsar catalog file, extract useful variables:
         # Period, Frequency, DM, pulse width
-        print "\tParsing files..."
+        print("\tParsing files...")
 
         # Loop through the specified directory
         for root, subFolders, filenames in os.walk(self.epnPath):
@@ -244,13 +244,13 @@ class EpnToAsc:
                 if(".acn" in path):
 
                     if(self.verbose):
-                        print "Processing:", path
+                        print("Processing:", path)
 
                     self.readEPNFile(path,filename,self.outputDir)
 
 
-        print "\n\tDone."
-        print "\t**************************************************************************" # Used only for formatting purposes.
+        print("\n\tDone.")
+        print("\t**************************************************************************") # Used only for formatting purposes.
 
     # ****************************************************************************************************
 
@@ -291,7 +291,7 @@ class EpnToAsc:
         which will create a new file J0014+4746_408.asc, in /Users/rob/ASC.
         """
 
-        print "\tProcessing: ", path
+        print("\tProcessing: ", path)
         data = []
         self.epnFile = open(path,'r') # Read only access
 

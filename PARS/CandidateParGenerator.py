@@ -467,7 +467,7 @@ class CandidateParGenerator:
         # Variables for managing distributions
         self.distributions  = ["beta","binom","expon","gamma","logistic","lognorm","norm","truncnorm","rayleigh","uniform"]
         self.params         = [4,3,2,3,2,3,2,4,2,2]
-        self.distDict        = dict(zip(self.distributions, self.params))
+        self.distDict        = dict(list(zip(self.distributions, self.params)))
 
 
         self.snrDist  = args.snrDist
@@ -487,57 +487,57 @@ class CandidateParGenerator:
 
         try:
             # Parse distribution parameters...
-            self.p0DistParams  = map(float, args.p0DistParams.split(":"))
-            self.snrDistParams  = map(float, args.snrDistParams.split(":"))
-            self.dmDistParams  = map(float, args.dmDistParams.split(":"))
-            self.dutyDistParams= map(float, args.dutyDistParams.split(":"))
+            self.p0DistParams  = list(map(float, args.p0DistParams.split(":")))
+            self.snrDistParams  = list(map(float, args.snrDistParams.split(":")))
+            self.dmDistParams  = list(map(float, args.dmDistParams.split(":")))
+            self.dutyDistParams= list(map(float, args.dutyDistParams.split(":")))
         except Exception as e: # Catch *all* exceptions.
-            print "\tError parsing distribution parameters (must be numeric only.)\n\t", sys.exc_info()[0]
-            print "\tExiting..."
+            print("\tError parsing distribution parameters (must be numeric only.)\n\t", sys.exc_info()[0])
+            print("\tExiting...")
             sys.exit()
 
         # ****************************************
         #   Print command line arguments & Run
         # ****************************************
 
-        print "\n\t**************************"
-        print "\t| Command Line Arguments |"
-        print "\t**************************"
-        print "\tDebug:",self.verbose
-        print "\tParsed Pulsar catalog file path:",self.atnfParsedPath
-        print "\tParsed ARFF file path:",self.arffParsedPath
-        print "\tOutput file path:",self.outputPath
-        print "\tOutput file dir:",self.outputDir
+        print("\n\t**************************")
+        print("\t| Command Line Arguments |")
+        print("\t**************************")
+        print("\tDebug:",self.verbose)
+        print("\tParsed Pulsar catalog file path:",self.atnfParsedPath)
+        print("\tParsed ARFF file path:",self.arffParsedPath)
+        print("\tOutput file path:",self.outputPath)
+        print("\tOutput file dir:",self.outputDir)
 
-        print "\tPepoch value for par:", self.pepoch
-        print "\tTZRMJD value for par:", self.tzrmjd
-        print "\tTZRFREQ value for par:", self.tzrfreq
-        print "\tUNITS value for par: ", self.units
+        print("\tPepoch value for par:", self.pepoch)
+        print("\tTZRMJD value for par:", self.tzrmjd)
+        print("\tTZRFREQ value for par:", self.tzrfreq)
+        print("\tUNITS value for par: ", self.units)
 
 
-        print "\tS/N modelling dist:", self.snrDist
-        print "\tS/N dist parameters:", self.snrDistParams
-        print "\tPeriod modelling dist:", self.p0Dist
-        print "\tPeriod dist parameters:", self.p0DistParams
-        print "\tDM modelling dist:", self.dmDist
-        print "\tDM dist parameters:", self.dmDistParams
-        print "\tDuty cycle modelling dist:", self.dutyDist
-        print "\tDuty cycle dist parameters:", self.dutyDistParams
-        print "\tAuto generate fake pulsars from distributions: ", self.autoGenerate
-        print "\tRandom seed:",self.seed
+        print("\tS/N modelling dist:", self.snrDist)
+        print("\tS/N dist parameters:", self.snrDistParams)
+        print("\tPeriod modelling dist:", self.p0Dist)
+        print("\tPeriod dist parameters:", self.p0DistParams)
+        print("\tDM modelling dist:", self.dmDist)
+        print("\tDM dist parameters:", self.dmDistParams)
+        print("\tDuty cycle modelling dist:", self.dutyDist)
+        print("\tDuty cycle dist parameters:", self.dutyDistParams)
+        print("\tAuto generate fake pulsars from distributions: ", self.autoGenerate)
+        print("\tRandom seed:",self.seed)
 
         # Check arguments for validity...
         if(os.path.isfile(self.atnfParsedPath) == True):
             self.parseATNFFile = True
 
         if(os.path.isfile(self.arffParsedPath) == True):
-            print "\n\tValid ARFF file supplied, fake pulsars will be generated from this data file."
+            print("\n\tValid ARFF file supplied, fake pulsars will be generated from this data file.")
             self.autoGenerate = False
 
         # First check user has supplied a par file output directory path ...
         if(not self.outputDir):
-            print "\n\tYou must supply a valid output directory file via the -d flag."
-            print "\tExiting..."
+            print("\n\tYou must supply a valid output directory file via the -d flag.")
+            print("\tExiting...")
             sys.exit()
 
         # Now the user may have supplied an output directory path, but it may
@@ -548,15 +548,15 @@ class CandidateParGenerator:
             try:
                 os.makedirs(self.outputDir)
             except OSError as exception:
-                print "\n\tException encountered trying to create par file output directory - Exiting!"
-                print "\tExiting..."
+                print("\n\tException encountered trying to create par file output directory - Exiting!")
+                print("\tExiting...")
                 sys.exit()
 
         # If the directory creation call above did not fail, the output directory
         # should now exist. Check that this is the case...
         if(os.path.isdir(self.outputDir) == False):
-            print "\n\tPar file output directory invalid - Exiting!"
-            print "\tExiting..."
+            print("\n\tPar file output directory invalid - Exiting!")
+            print("\tExiting...")
             sys.exit()
         else:
             self.pulsarParFileDir = self.outputDir + "/Pulsar"
@@ -571,58 +571,58 @@ class CandidateParGenerator:
 
         # Check the buffer value supplied by the user...
         if(self.seed < 0):
-            print "\n\tSupplied seed value invalid - Exiting!"
-            print "\tExiting..."
+            print("\n\tSupplied seed value invalid - Exiting!")
+            print("\tExiting...")
             sys.exit()
 
         # Now check supplied distribution parameters
         if(self.snrDist not in self.distributions):
-            print "\tInvalid S/N distribution supplied: ", self.snrDist
-            print "\tExiting..."
+            print("\tInvalid S/N distribution supplied: ", self.snrDist)
+            print("\tExiting...")
             sys.exit()
 
         if(self.p0Dist not in self.distributions):
-            print "\tInvalid period distribution supplied: ", self.p0Dist
-            print "\tExiting..."
+            print("\tInvalid period distribution supplied: ", self.p0Dist)
+            print("\tExiting...")
             sys.exit()
 
         if(self.dmDist not in self.distributions):
-            print "\tInvalid DM distribution supplied: ", self.dmDist
-            print "\tExiting..."
+            print("\tInvalid DM distribution supplied: ", self.dmDist)
+            print("\tExiting...")
             sys.exit()
 
         if(self.dutyDist not in self.distributions):
-            print "\tInvalid duty cycle distribution supplied: ", self.dutyDist
-            print "\tExiting..."
+            print("\tInvalid duty cycle distribution supplied: ", self.dutyDist)
+            print("\tExiting...")
             sys.exit()
 
         canProceed = True
         if(self.autoGenerate == True):
 
-            for key, value in self.distDict.iteritems():
+            for key, value in self.distDict.items():
 
                 if(self.snrDist == key):
                     if(len(self.snrDistParams) != int(value)):
-                        print "\tIncorrect number of parameters supplied for the ", key , " S/N distribution."
-                        print "\tRequired ", value , " but received ", len(self.snrDistParams)
+                        print("\tIncorrect number of parameters supplied for the ", key , " S/N distribution.")
+                        print("\tRequired ", value , " but received ", len(self.snrDistParams))
                         canProceed = False
 
                 if(self.p0Dist == key):
                     if(len(self.p0DistParams) != int(value)):
-                        print "\tIncorrect number of parameters supplied for the ", key , " period distribution."
-                        print "\tRequired ", value , " but received ", len(self.p0DistParams)
+                        print("\tIncorrect number of parameters supplied for the ", key , " period distribution.")
+                        print("\tRequired ", value , " but received ", len(self.p0DistParams))
                         canProceed = False
 
                 if(self.dmDist == key):
                     if(len(self.dmDistParams) != int(value)):
-                        print "\tIncorrect number of parameters supplied for the ", key , " DM distribution."
-                        print "\tRequired ", value , " but received ", len(self.dmDistParams)
+                        print("\tIncorrect number of parameters supplied for the ", key , " DM distribution.")
+                        print("\tRequired ", value , " but received ", len(self.dmDistParams))
                         canProceed = False
 
         # Check supplied distribution parameters.
         if(canProceed == False):
-            print "\tCould not proceed to fake pulsar parameter generation!"
-            print "\tExiting..."
+            print("\tCould not proceed to fake pulsar parameter generation!")
+            print("\tExiting...")
             sys.exit()
 
         # Now seed random number generator
@@ -700,26 +700,26 @@ class CandidateParGenerator:
             self.atnfFile.close()
 
             # Print some details of the data collected...
-            print "\n\t+----- ATNF DATA -----+"
-            print "\tPeriods parsed     : ", len(ATNF_PERIODS) , " Mean: ", mean(ATNF_PERIODS) , \
+            print("\n\t+----- ATNF DATA -----+")
+            print("\tPeriods parsed     : ", len(ATNF_PERIODS) , " Mean: ", mean(ATNF_PERIODS) , \
                 " Min: ", min(ATNF_PERIODS) , " Max: ", max(ATNF_PERIODS) , \
-                " Zero elements: ", len(ATNF_PERIODS) - count_nonzero(ATNF_PERIODS)
+                " Zero elements: ", len(ATNF_PERIODS) - count_nonzero(ATNF_PERIODS))
 
-            print "\tFrequencies parsed : ", len(ATNF_FREQS)   , " Mean: ", mean(ATNF_FREQS) , \
+            print("\tFrequencies parsed : ", len(ATNF_FREQS)   , " Mean: ", mean(ATNF_FREQS) , \
                 " Min: ", min(ATNF_FREQS) , " Max: ", max(ATNF_FREQS) ,\
-                " Zero elements: ", len(ATNF_FREQS) - count_nonzero(ATNF_FREQS)
+                " Zero elements: ", len(ATNF_FREQS) - count_nonzero(ATNF_FREQS))
 
-            print "\tDMs parsed         : ", len(ATNF_DMS)     , " Mean: ", mean(ATNF_DMS) , \
+            print("\tDMs parsed         : ", len(ATNF_DMS)     , " Mean: ", mean(ATNF_DMS) , \
                 " Min: ", min(ATNF_DMS) , " Max: ", max(ATNF_DMS) , \
-                " Zero elements: ", len(ATNF_DMS) - count_nonzero(ATNF_DMS)
+                " Zero elements: ", len(ATNF_DMS) - count_nonzero(ATNF_DMS))
 
-            print "\t10% Widths parsed  : ", len(ATNF_W10S)    , " Mean: ", mean(ATNF_W10S) , \
+            print("\t10% Widths parsed  : ", len(ATNF_W10S)    , " Mean: ", mean(ATNF_W10S) , \
                 " Min: ", min(ATNF_W10S) , " Max: ", max(ATNF_W10S) , \
-                " Zero elements: ", len(ATNF_W10S) - count_nonzero(ATNF_W10S)
+                " Zero elements: ", len(ATNF_W10S) - count_nonzero(ATNF_W10S))
 
-            print "\t50% Widths parsed  : ", len(ATNF_W50S)    , " Mean: ", mean(ATNF_W50S) , \
+            print("\t50% Widths parsed  : ", len(ATNF_W50S)    , " Mean: ", mean(ATNF_W50S) , \
                 " Min: ", min(ATNF_W50S) , " Max: ", max(ATNF_W50S) , \
-                " Zero elements: ", len(ATNF_W50S) - count_nonzero(ATNF_W50S)
+                " Zero elements: ", len(ATNF_W50S) - count_nonzero(ATNF_W50S))
 
         # ****************************************
         #            Parse ARFF file
@@ -766,30 +766,30 @@ class CandidateParGenerator:
 
             # Print some details of the data collected...
 
-            print "\n\t+----- ARFF DATA -----+"
-            print "\tPeriods parsed     : ", len(ARFF_PERIODS) , " Mean: ", mean(ARFF_PERIODS) , \
+            print("\n\t+----- ARFF DATA -----+")
+            print("\tPeriods parsed     : ", len(ARFF_PERIODS) , " Mean: ", mean(ARFF_PERIODS) , \
                 " Min: ", min(ARFF_PERIODS) , " Max: ", max(ARFF_PERIODS) , \
-                " Zero elements: ", len(ARFF_PERIODS) - count_nonzero(ARFF_PERIODS)
+                " Zero elements: ", len(ARFF_PERIODS) - count_nonzero(ARFF_PERIODS))
 
-            print "\tFreqs. parsed      : ", len(ARFF_FREQS) , " Mean: ", mean(ARFF_FREQS) , \
+            print("\tFreqs. parsed      : ", len(ARFF_FREQS) , " Mean: ", mean(ARFF_FREQS) , \
                 " Min: ", min(ARFF_FREQS) , " Max: ", max(ARFF_FREQS) , \
-                " Zero elements: ", len(ARFF_FREQS) - count_nonzero(ARFF_FREQS)
+                " Zero elements: ", len(ARFF_FREQS) - count_nonzero(ARFF_FREQS))
 
-            print "\tS/Ns parsed        : ", len(ARFF_SNRS)   , " Mean: ", mean(ARFF_SNRS) , \
+            print("\tS/Ns parsed        : ", len(ARFF_SNRS)   , " Mean: ", mean(ARFF_SNRS) , \
                 " Min: ", min(ARFF_SNRS) , " Max: ", max(ARFF_SNRS) , \
-                " Zero elements: ", len(ARFF_SNRS) - count_nonzero(ARFF_SNRS)
+                " Zero elements: ", len(ARFF_SNRS) - count_nonzero(ARFF_SNRS))
 
-            print "\tDMs parsed         : ", len(ARFF_DMS)     , " Mean: ", mean(ARFF_DMS) , \
+            print("\tDMs parsed         : ", len(ARFF_DMS)     , " Mean: ", mean(ARFF_DMS) , \
                 " Min: ", min(ARFF_DMS) , " Max: ", max(ARFF_DMS) , \
-                " Zero elements: ", len(ARFF_DMS) - count_nonzero(ARFF_DMS)
+                " Zero elements: ", len(ARFF_DMS) - count_nonzero(ARFF_DMS))
 
-            print "\tWidths parsed      : ", len(ARFF_WIDTHS)    , " Mean: ", mean(ARFF_WIDTHS) , \
+            print("\tWidths parsed      : ", len(ARFF_WIDTHS)    , " Mean: ", mean(ARFF_WIDTHS) , \
                 " Min: ", min(ARFF_WIDTHS) , " Max: ", max(ARFF_WIDTHS) , \
-                " Zero elements: ", len(ARFF_WIDTHS) - count_nonzero(ARFF_WIDTHS)
+                " Zero elements: ", len(ARFF_WIDTHS) - count_nonzero(ARFF_WIDTHS))
 
-            print "\tDuty cycles parsed : ", len(ARFF_DCYCLE)    , " Mean: ", mean(ARFF_DCYCLE) , \
+            print("\tDuty cycles parsed : ", len(ARFF_DCYCLE)    , " Mean: ", mean(ARFF_DCYCLE) , \
                 " Min: ", min(ARFF_DCYCLE) , " Max: ", max(ARFF_DCYCLE) , \
-                " Zero elements: ", len(ARFF_DCYCLE) - count_nonzero(ARFF_DCYCLE)
+                " Zero elements: ", len(ARFF_DCYCLE) - count_nonzero(ARFF_DCYCLE))
 
         # ****************************************
         #
@@ -803,19 +803,19 @@ class CandidateParGenerator:
 
         # Now create the distributions.
 
-        print "\n\t+----- Fitting Distributions -----+"
+        print("\n\t+----- Fitting Distributions -----+")
 
         # ****************************************
         #              Pulse Periods
         # ****************************************
 
-        print "\n\t1.1 Generating " , self.samples , " period samples..."
+        print("\n\t1.1 Generating " , self.samples , " period samples...")
 
         if(self.autoGenerate == True):
             generatedPeriods = self.generateData(self.p0Dist,self.p0DistParams,self.samples)
 
             if(self.verbose):
-                print "\t1.1.1 Creating histogram for period samples..."
+                print("\t1.1.1 Creating histogram for period samples...")
                 plt.hist(generatedPeriods, bins=self.freedmanDiaconisRule(generatedPeriods), color='w')
                 plt.title("Histogram of Generated Periods ("+ self.p0Dist + " distribution)")
                 plt.xlabel("Period (s)")
@@ -832,7 +832,7 @@ class CandidateParGenerator:
                 # Plot histogram to show randomly generated period data points,
                 # if verbose logging enabled... data should be uniformly distributed.
                 if(self.verbose):
-                    print "\t1.1.1 Creating histogram for period samples..."
+                    print("\t1.1.1 Creating histogram for period samples...")
                     ARFF_Period_Histogram = plt.hist(generatedPeriods, bins=self.freedmanDiaconisRule(generatedPeriods), color='w')
                     plt.title("Histogram of Uniformly Generated Periods")
                     plt.xlabel("Period (s)")
@@ -841,24 +841,24 @@ class CandidateParGenerator:
 
                 # Now compute some stats describing generated data
                 if(self.verbose):
-                    print "\t1.1.2 Creating box-plot for generated and observed period samples..."
-                    print "\t1.1.3 Boxplot parameters..."
-                    print "\t\tGenerated Data:"
-                    print "\t\t\tMin    : " , min(generatedPeriods)
-                    print "\t\t\tMax    : " , max(generatedPeriods)
-                    print "\t\t\tMedian : " , median(generatedPeriods)
-                    print "\t\t\tSTDEV  : " , std(generatedPeriods)
+                    print("\t1.1.2 Creating box-plot for generated and observed period samples...")
+                    print("\t1.1.3 Boxplot parameters...")
+                    print("\t\tGenerated Data:")
+                    print("\t\t\tMin    : " , min(generatedPeriods))
+                    print("\t\t\tMax    : " , max(generatedPeriods))
+                    print("\t\t\tMedian : " , median(generatedPeriods))
+                    print("\t\t\tSTDEV  : " , std(generatedPeriods))
                     q75, q25 = percentile(generatedPeriods, [75,25])
-                    print "\t\t\tIQR    : " , str(q75 - q25)
-                    print "\t\t\tRange  : " , str( max(generatedPeriods) - min(generatedPeriods) )
-                    print "\t\tObserved Data:"
-                    print "\t\t\tMin    : " , min(ARFF_PERIODS)
-                    print "\t\t\tMax    : " , max(ARFF_PERIODS)
-                    print "\t\t\tMedian : " , median(ARFF_PERIODS)
-                    print "\t\t\tSTDEV  : " , std(ARFF_PERIODS)
+                    print("\t\t\tIQR    : " , str(q75 - q25))
+                    print("\t\t\tRange  : " , str( max(generatedPeriods) - min(generatedPeriods) ))
+                    print("\t\tObserved Data:")
+                    print("\t\t\tMin    : " , min(ARFF_PERIODS))
+                    print("\t\t\tMax    : " , max(ARFF_PERIODS))
+                    print("\t\t\tMedian : " , median(ARFF_PERIODS))
+                    print("\t\t\tSTDEV  : " , std(ARFF_PERIODS))
                     q75, q25 = percentile(ARFF_PERIODS, [75,25])
-                    print "\t\t\tIQR    : " , str(q75 - q25)
-                    print "\t\t\tRange  : " , str( max(ARFF_PERIODS) - min(ARFF_PERIODS) )
+                    print("\t\t\tIQR    : " , str(q75 - q25))
+                    print("\t\t\tRange  : " , str( max(ARFF_PERIODS) - min(ARFF_PERIODS) ))
 
                     data = [generatedPeriods, ARFF_PERIODS]
                     plt.boxplot(data, notch=0, sym='+', vert=1, whis=1.5)
@@ -869,21 +869,21 @@ class CandidateParGenerator:
                     plt.ylim([min_period + (0.2 * min_period),max_period + (0.2 * max_period)])
                     plt.show()
             else:
-                print "Could not get sample period data from parsed ARFF file!"
-                print "\tExiting..."
+                print("Could not get sample period data from parsed ARFF file!")
+                print("\tExiting...")
                 sys.exit()
 
         # ****************************************
         #           Dispersion Measure
         # ****************************************
 
-        print "\n\t2.1 Generating " , self.samples , " DM samples..."
+        print("\n\t2.1 Generating " , self.samples , " DM samples...")
 
         if(self.autoGenerate == True):
             generatedDMs = self.generateData(self.dmDist,self.dmDistParams,self.samples)
 
             if(self.verbose):
-                print "\t1.1.1 Creating histogram for DM samples..."
+                print("\t1.1.1 Creating histogram for DM samples...")
                 plt.hist(generatedDMs, bins=self.freedmanDiaconisRule(generatedDMs), color='w')
                 plt.title("Histogram of Generated DMs ("+ self.dmDist + " distribution)")
                 plt.xlabel("DM")
@@ -894,17 +894,17 @@ class CandidateParGenerator:
             if(len(ARFF_DMS)>0):
 
                 # Now fit exponential distribution to the DMs observed.
-                print "\n\n\t2.1. Fitting exponential to ARFF DM data..."
+                print("\n\n\t2.1. Fitting exponential to ARFF DM data...")
                 min_dm = 0
                 max_dm = max(ARFF_DMS)
                 loc, scale = stats.expon.fit(ARFF_DMS, floc=0)
                 x = arange(min_dm,int(max_dm)+1) # x-axis data points, from zero to DM max.
                 pdf_fitted = stats.expon.pdf(x,loc,scale)
-                print "\t2.2. Exponential Fit Parameters:"
-                print "\t\tLocation: ", loc, " Scale: ", scale
+                print("\t2.2. Exponential Fit Parameters:")
+                print("\t\tLocation: ", loc, " Scale: ", scale)
 
                 if(self.verbose):
-                    print "\t2.2.1. Plotting PDF for exponential model..."
+                    print("\t2.2.1. Plotting PDF for exponential model...")
                     plt.plot(pdf_fitted)
                     plt.title("PDF of Exponential fitted to DM")
                     plt.xlabel("Dispersion measure (DM)")
@@ -912,11 +912,11 @@ class CandidateParGenerator:
                     plt.show()
 
                 # Now generate exponential samples.
-                print "\t2.3. Generating " , self.samples , " DM samples from fitted exponential PDF..."
+                print("\t2.3. Generating " , self.samples , " DM samples from fitted exponential PDF...")
                 generatedDMs = stats.expon.rvs(loc,scale,self.samples)
 
                 if(self.verbose):
-                    print "\t2.3.1. Creating histogram for DM samples..."
+                    print("\t2.3.1. Creating histogram for DM samples...")
                     ARFF_DM_Histogram = plt.hist(generatedDMs, bins=self.freedmanDiaconisRule(generatedDMs), color='w')
                     plt.title("Histogram of Exponentially generated DMs")
                     plt.xlabel("Dispersion measure (DM)")
@@ -925,24 +925,24 @@ class CandidateParGenerator:
 
                 # Now compute some stats describing generated data
                 if(self.verbose):
-                    print "\t1.1.2 Creating box-plot for generated and observed DM samples..."
-                    print "\t1.1.3 Boxplot parameters..."
-                    print "\t\tGenerated Data:"
-                    print "\t\t\tMin    : " , min(generatedDMs)
-                    print "\t\t\tMax    : " , max(generatedDMs)
-                    print "\t\t\tMedian : " , median(generatedDMs)
-                    print "\t\t\tSTDEV  : " , std(generatedDMs)
+                    print("\t1.1.2 Creating box-plot for generated and observed DM samples...")
+                    print("\t1.1.3 Boxplot parameters...")
+                    print("\t\tGenerated Data:")
+                    print("\t\t\tMin    : " , min(generatedDMs))
+                    print("\t\t\tMax    : " , max(generatedDMs))
+                    print("\t\t\tMedian : " , median(generatedDMs))
+                    print("\t\t\tSTDEV  : " , std(generatedDMs))
                     q75, q25 = percentile(generatedDMs, [75,25])
-                    print "\t\t\tIQR    : " , str(q75 - q25)
-                    print "\t\t\tRange  : " , str( max(generatedDMs) - min(generatedDMs) )
-                    print "\t\tObserved Data:"
-                    print "\t\t\tMin    : " , min(ARFF_DMS)
-                    print "\t\t\tMax    : " , max(ARFF_DMS)
-                    print "\t\t\tMedian : " , median(ARFF_DMS)
-                    print "\t\t\tSTDEV  : " , std(ARFF_DMS)
+                    print("\t\t\tIQR    : " , str(q75 - q25))
+                    print("\t\t\tRange  : " , str( max(generatedDMs) - min(generatedDMs) ))
+                    print("\t\tObserved Data:")
+                    print("\t\t\tMin    : " , min(ARFF_DMS))
+                    print("\t\t\tMax    : " , max(ARFF_DMS))
+                    print("\t\t\tMedian : " , median(ARFF_DMS))
+                    print("\t\t\tSTDEV  : " , std(ARFF_DMS))
                     q75, q25 = percentile(ARFF_DMS, [75,25])
-                    print "\t\t\tIQR    : " , str(q75 - q25)
-                    print "\t\t\tRange  : " , str( max(ARFF_DMS) - min(ARFF_DMS) )
+                    print("\t\t\tIQR    : " , str(q75 - q25))
+                    print("\t\t\tRange  : " , str( max(ARFF_DMS) - min(ARFF_DMS) ))
 
                     data = [generatedDMs, ARFF_DMS]
                     plt.boxplot(data, notch=0, sym='+', vert=1, whis=1.5)
@@ -953,21 +953,21 @@ class CandidateParGenerator:
                     plt.ylim([-10,max_dm + (0.2 * max_dm)])
                     plt.show()
             else:
-                print "Could not get sample DM data from parsed ARFF file!"
-                print "\tExiting..."
+                print("Could not get sample DM data from parsed ARFF file!")
+                print("\tExiting...")
                 sys.exit()
 
         # ****************************************
         #              Duty Cycles
         # ****************************************
 
-        print "\n\n\t3.1. Generating " , self.samples , " duty cycle samples..."
+        print("\n\n\t3.1. Generating " , self.samples , " duty cycle samples...")
 
         if(self.autoGenerate == True):
             generatedDutyCycles = self.generateData(self.dutyDist,self.dutyDistParams,self.samples)
 
             if(self.verbose):
-                print "\t1.1.1 Creating histogram for duty cycle samples..."
+                print("\t1.1.1 Creating histogram for duty cycle samples...")
                 plt.hist(generatedDutyCycles, bins=self.freedmanDiaconisRule(generatedDutyCycles), color='w')
                 plt.title("Histogram of Generated duty cycles ("+ self.dutyDist + " distribution)")
                 plt.xlabel("Duty cycle")
@@ -985,7 +985,7 @@ class CandidateParGenerator:
                 # Plot histogram to show randomly generated period data points,
                 # if verbose logging enabled... data should be uniformly distributed.
                 if(self.verbose):
-                    print "\t3.1.1. Creating histogram for duty cycle samples..."
+                    print("\t3.1.1. Creating histogram for duty cycle samples...")
                     ARFF_DutyCycle_Histogram = plt.hist(generatedDutyCycles, bins=self.freedmanDiaconisRule(generatedDutyCycles), color='w')
                     plt.title("Histogram of Uniformly Generated Duty Cycles")
                     plt.xlabel("Duty Cycle")
@@ -994,24 +994,24 @@ class CandidateParGenerator:
 
                 # Now compute some stats describing generated data
                 if(self.verbose):
-                    print "\t3.1.2 Creating box-plot for generated and observed Duty Cycles samples..."
-                    print "\t3.1.3 Boxplot parameters..."
-                    print "\t\tGenerated Data:"
-                    print "\t\t\tMin    : " , min(generatedDutyCycles)
-                    print "\t\t\tMax    : " , max(generatedDutyCycles)
-                    print "\t\t\tMedian : " , median(generatedDutyCycles)
-                    print "\t\t\tSTDEV  : " , std(generatedDutyCycles)
+                    print("\t3.1.2 Creating box-plot for generated and observed Duty Cycles samples...")
+                    print("\t3.1.3 Boxplot parameters...")
+                    print("\t\tGenerated Data:")
+                    print("\t\t\tMin    : " , min(generatedDutyCycles))
+                    print("\t\t\tMax    : " , max(generatedDutyCycles))
+                    print("\t\t\tMedian : " , median(generatedDutyCycles))
+                    print("\t\t\tSTDEV  : " , std(generatedDutyCycles))
                     q75, q25 = percentile(generatedDutyCycles, [75,25])
-                    print "\t\t\tIQR    : " , str(q75 - q25)
-                    print "\t\t\tRange  : " , str( max(generatedDutyCycles) - min(generatedDutyCycles) )
-                    print "\t\tObserved Data:"
-                    print "\t\t\tMin    : " , min(ARFF_DCYCLE)
-                    print "\t\t\tMax    : " , max(ARFF_DCYCLE)
-                    print "\t\t\tMedian : " , median(ARFF_DCYCLE)
-                    print "\t\t\tSTDEV  : " , std(ARFF_DCYCLE)
+                    print("\t\t\tIQR    : " , str(q75 - q25))
+                    print("\t\t\tRange  : " , str( max(generatedDutyCycles) - min(generatedDutyCycles) ))
+                    print("\t\tObserved Data:")
+                    print("\t\t\tMin    : " , min(ARFF_DCYCLE))
+                    print("\t\t\tMax    : " , max(ARFF_DCYCLE))
+                    print("\t\t\tMedian : " , median(ARFF_DCYCLE))
+                    print("\t\t\tSTDEV  : " , std(ARFF_DCYCLE))
                     q75, q25 = percentile(ARFF_DCYCLE, [75,25])
-                    print "\t\t\tIQR    : " , str(q75 - q25)
-                    print "\t\t\tRange  : " , str( max(ARFF_DCYCLE) - min(ARFF_DCYCLE) )
+                    print("\t\t\tIQR    : " , str(q75 - q25))
+                    print("\t\t\tRange  : " , str( max(ARFF_DCYCLE) - min(ARFF_DCYCLE) ))
 
                     data = [generatedDutyCycles, ARFF_DCYCLE]
                     plt.boxplot(data, notch=0, sym='+', vert=1, whis=1.5)
@@ -1023,14 +1023,14 @@ class CandidateParGenerator:
                     plt.show()
 
             else:
-                print "Could not get sample duty cycle data from parsed ARFF file!"
-                print "\tExiting..."
+                print("Could not get sample duty cycle data from parsed ARFF file!")
+                print("\tExiting...")
                 sys.exit()
         # ****************************************
         #              Pulse Widths
         # ****************************************
 
-        print "\n\n\t4.1. Generating Pulse widths based on duty cycle and period (Width = Duty Cycle x Period) "
+        print("\n\n\t4.1. Generating Pulse widths based on duty cycle and period (Width = Duty Cycle x Period) ")
 
         # Generate widths based on: Width = Duty Cycle x Period.
         generatedWidths = []
@@ -1053,7 +1053,7 @@ class CandidateParGenerator:
         # Plot histogram to show randomly generated width data points,
         # if verbose logging enabled...
         if(self.verbose):
-            print "\t4.1.1. Creating histogram for pulse width samples..."
+            print("\t4.1.1. Creating histogram for pulse width samples...")
             ARFF_Widths_Histogram = plt.hist(generatedWidths, bins=self.freedmanDiaconisRule(generatedWidths), color='b',label='Generated widths')
             plt.title("Histogram of Generated Pulse Widths (based on Width = Duty Cycle x Period)")
             plt.xlabel("Pulse Width (ms)")
@@ -1063,24 +1063,24 @@ class CandidateParGenerator:
 
         # Now compute some stats describing generated data
         if(self.verbose and self.autoGenerate == False):
-            print "\t4.2.1 Creating box-plot for generated and observed Pulse Widths samples..."
-            print "\t4.2.1 Boxplot parameters..."
-            print "\t\tGenerated Data:"
-            print "\t\t\tMin    : " , min(generatedWidths)
-            print "\t\t\tMax    : " , max(generatedWidths)
-            print "\t\t\tMedian : " , median(generatedWidths)
-            print "\t\t\tSTDEV  : " , std(generatedWidths)
+            print("\t4.2.1 Creating box-plot for generated and observed Pulse Widths samples...")
+            print("\t4.2.1 Boxplot parameters...")
+            print("\t\tGenerated Data:")
+            print("\t\t\tMin    : " , min(generatedWidths))
+            print("\t\t\tMax    : " , max(generatedWidths))
+            print("\t\t\tMedian : " , median(generatedWidths))
+            print("\t\t\tSTDEV  : " , std(generatedWidths))
             q75, q25 = percentile(generatedWidths, [75 ,25])
-            print "\t\t\tIQR    : " , str(q75 - q25)
-            print "\t\t\tRange  : " , str( max(generatedWidths) - min(generatedWidths) )
-            print "\t\tObserved Data:"
-            print "\t\t\tMin    : " , min(ARFF_WIDTHS)
-            print "\t\t\tMax    : " , max(ARFF_WIDTHS)
-            print "\t\t\tMedian : " , median(ARFF_WIDTHS)
-            print "\t\t\tSTDEV  : " , std(ARFF_WIDTHS)
+            print("\t\t\tIQR    : " , str(q75 - q25))
+            print("\t\t\tRange  : " , str( max(generatedWidths) - min(generatedWidths) ))
+            print("\t\tObserved Data:")
+            print("\t\t\tMin    : " , min(ARFF_WIDTHS))
+            print("\t\t\tMax    : " , max(ARFF_WIDTHS))
+            print("\t\t\tMedian : " , median(ARFF_WIDTHS))
+            print("\t\t\tSTDEV  : " , std(ARFF_WIDTHS))
             q75, q25 = percentile(ARFF_WIDTHS, [75 ,25])
-            print "\t\t\tIQR    : " , str(q75 - q25)
-            print "\t\t\tRange  : " , str( max(ARFF_WIDTHS) - min(ARFF_WIDTHS) )
+            print("\t\t\tIQR    : " , str(q75 - q25))
+            print("\t\t\tRange  : " , str( max(ARFF_WIDTHS) - min(ARFF_WIDTHS) ))
 
             data = [generatedWidths, ARFF_WIDTHS]
             plt.boxplot(data, notch=0, sym='+', vert=1, whis=1.5)
@@ -1095,13 +1095,13 @@ class CandidateParGenerator:
         #                  SNRS
         # ****************************************
 
-        print "\n\n\t5.1. Generating " , self.samples , " S/N samples..."
+        print("\n\n\t5.1. Generating " , self.samples , " S/N samples...")
 
         if(self.autoGenerate == True):
             generatedSNRs = self.generateData(self.snrDist,self.snrDistParams,self.samples)
 
             if(self.verbose):
-                print "\t5.1.1 Creating histogram for S/N samples..."
+                print("\t5.1.1 Creating histogram for S/N samples...")
                 plt.hist(generatedSNRs, bins=self.freedmanDiaconisRule(generatedSNRs), color='w')
                 plt.title("Histogram of Generated S/Ns ("+ self.snrDist + " distribution)")
                 plt.xlabel("S/N")
@@ -1112,17 +1112,17 @@ class CandidateParGenerator:
             if(len(ARFF_SNRS)>0):
 
                 # Now fit exponential distribution to the DMs observed.
-                print "\n\n\t5.1. Fitting exponential to ARFF S/N data..."
+                print("\n\n\t5.1. Fitting exponential to ARFF S/N data...")
                 min_snr = 0
                 max_snr = max(ARFF_SNRS)
                 loc, scale = stats.expon.fit(ARFF_SNRS, floc=0)
                 x = arange(min_snr,int(max_snr)+1) # x-axis data points, from zero to DM max.
                 pdf_fitted = stats.expon.pdf(x,loc,scale)
-                print "\t5.2. Exponential Fit Parameters:"
-                print "\t\tLocation: ", loc, " Scale: ", scale
+                print("\t5.2. Exponential Fit Parameters:")
+                print("\t\tLocation: ", loc, " Scale: ", scale)
 
                 if(self.verbose):
-                    print "\t5.2.1. Plotting PDF for exponential model..."
+                    print("\t5.2.1. Plotting PDF for exponential model...")
                     plt.plot(pdf_fitted)
                     plt.title("PDF of Exponential fitted to S/N")
                     plt.xlabel("S/N")
@@ -1130,12 +1130,12 @@ class CandidateParGenerator:
                     plt.show()
 
                 # Now generate exponential samples.
-                print "\t5.3. Generating " , self.samples , " S/N samples from fitted exponential PDF..."
+                print("\t5.3. Generating " , self.samples , " S/N samples from fitted exponential PDF...")
                 generatedSNRs = stats.expon.rvs(loc,scale,self.samples)
 
                 # if verbose logging enabled... data should be uniformly distributed.
                 if(self.verbose):
-                    print "\t5.1.1. Creating histogram for S/N samples..."
+                    print("\t5.1.1. Creating histogram for S/N samples...")
                     ARFF_SNR_Histogram = plt.hist(generatedSNRs, bins=self.freedmanDiaconisRule(generatedSNRs), color='w')
                     plt.title("Histogram of exponentially Generated S/Ns")
                     plt.xlabel("S/N")
@@ -1144,24 +1144,24 @@ class CandidateParGenerator:
 
                 # Now compute some stats describing generated data
                 if(self.verbose):
-                    print "\t5.1.2 Creating box-plot for generated and observed S/N samples..."
-                    print "\t5.1.3 Boxplot parameters..."
-                    print "\t\tGenerated Data:"
-                    print "\t\t\tMin    : " , min(generatedSNRs)
-                    print "\t\t\tMax    : " , max(generatedSNRs)
-                    print "\t\t\tMedian : " , median(generatedSNRs)
-                    print "\t\t\tSTDEV  : " , std(generatedSNRs)
+                    print("\t5.1.2 Creating box-plot for generated and observed S/N samples...")
+                    print("\t5.1.3 Boxplot parameters...")
+                    print("\t\tGenerated Data:")
+                    print("\t\t\tMin    : " , min(generatedSNRs))
+                    print("\t\t\tMax    : " , max(generatedSNRs))
+                    print("\t\t\tMedian : " , median(generatedSNRs))
+                    print("\t\t\tSTDEV  : " , std(generatedSNRs))
                     q75, q25 = percentile(generatedSNRs, [75,25])
-                    print "\t\t\tIQR    : " , str(q75 - q25)
-                    print "\t\t\tRange  : " , str( max(generatedSNRs) - min(generatedSNRs) )
-                    print "\t\tObserved Data:"
-                    print "\t\t\tMin    : " , min(ARFF_SNRS)
-                    print "\t\t\tMax    : " , max(ARFF_SNRS)
-                    print "\t\t\tMedian : " , median(ARFF_SNRS)
-                    print "\t\t\tSTDEV  : " , std(ARFF_SNRS)
+                    print("\t\t\tIQR    : " , str(q75 - q25))
+                    print("\t\t\tRange  : " , str( max(generatedSNRs) - min(generatedSNRs) ))
+                    print("\t\tObserved Data:")
+                    print("\t\t\tMin    : " , min(ARFF_SNRS))
+                    print("\t\t\tMax    : " , max(ARFF_SNRS))
+                    print("\t\t\tMedian : " , median(ARFF_SNRS))
+                    print("\t\t\tSTDEV  : " , std(ARFF_SNRS))
                     q75, q25 = percentile(ARFF_SNRS, [75,25])
-                    print "\t\t\tIQR    : " , str(q75 - q25)
-                    print "\t\t\tRange  : " , str( max(ARFF_SNRS) - min(ARFF_SNRS) )
+                    print("\t\t\tIQR    : " , str(q75 - q25))
+                    print("\t\t\tRange  : " , str( max(ARFF_SNRS) - min(ARFF_SNRS) ))
 
                     data = [generatedSNRs, ARFF_SNRS]
                     plt.boxplot(data, notch=0, sym='+', vert=1, whis=1.5)
@@ -1173,46 +1173,46 @@ class CandidateParGenerator:
                     plt.show()
 
             else:
-                print "Could not get sample S/N data from parsed ARFF file!"
-                print "\tExiting..."
+                print("Could not get sample S/N data from parsed ARFF file!")
+                print("\tExiting...")
                 sys.exit()
 
         # Now check data has been generated correctly
         canProceed = True
         if(len(generatedPeriods)==self.samples):
-            print "\n\n\tAll period data generated"
+            print("\n\n\tAll period data generated")
         else:
-            print "\n\n\tNot all period data generated!"
+            print("\n\n\tNot all period data generated!")
             canProceed = False
 
         if(len(generatedDMs)==self.samples):
-            print "\n\n\tAll DM data generated"
+            print("\n\n\tAll DM data generated")
         else:
-            print "\n\n\tNot all DM data generated!"
+            print("\n\n\tNot all DM data generated!")
             canProceed = False
 
         if(len(generatedDutyCycles)==self.samples):
-            print "\n\n\tAll duty cycle data generated"
+            print("\n\n\tAll duty cycle data generated")
         else:
-            print "\n\n\tNot all duty cycle data generated!"
+            print("\n\n\tNot all duty cycle data generated!")
             canProceed = False
 
         if(len(generatedSNRs)==self.samples):
-            print "\n\n\tAll S/N data generated"
+            print("\n\n\tAll S/N data generated")
         else:
-            print "\n\n\tNot all S/N data generated!"
+            print("\n\n\tNot all S/N data generated!")
             canProceed = False
 
         if(canProceed==False):
-            print "Cannot proceed as not all data has been generated!"
-            print "\tExiting..."
+            print("Cannot proceed as not all data has been generated!")
+            print("\tExiting...")
             sys.exit()
 
         # ****************************************
         #            Save data to file
         # ****************************************
 
-        print "\n\n\tWriting data to the output file..."
+        print("\n\n\tWriting data to the output file...")
         for period, dm, pulseWidth,dutyCycle,snr in zip(generatedPeriods, generatedDMs,generatedWidths,generatedDutyCycles,generatedSNRs):
             text = str(period) + "," + str(dm) + "," + str(pulseWidth) + "," + str(dutyCycle) + "," + str(snr) + "\n"
             self.appendToFile(self.outputPath,text)
@@ -1273,9 +1273,9 @@ class CandidateParGenerator:
 
                         self.appendToFile(parFilePath,parFileText)
                 else:
-                    print "Unequal ATNF inputs for par file creation - some entries are missing data."
+                    print("Unequal ATNF inputs for par file creation - some entries are missing data.")
             else:
-                print "ATNF data not read, cannot create par files."
+                print("ATNF data not read, cannot create par files.")
 
         # ****************************************
         #          Create fake pulsar pars
@@ -1302,8 +1302,8 @@ class CandidateParGenerator:
             counter+= 1
 
 
-        print "\n\tDone."
-        print "\t**************************************************************************" # Used only for formatting purposes.
+        print("\n\tDone.")
+        print("\t**************************************************************************") # Used only for formatting purposes.
 
     # ****************************************************************************************************
 
@@ -1393,7 +1393,7 @@ class CandidateParGenerator:
             # beta distribution
             if(dist == "beta"):
                 data = stats.beta.rvs(params[0],params[1],loc=params[0],scale=params[1],size=samples)
-                print type(data)
+                print(type(data))
 
             # Exponential distribution
             elif(dist == "expon"):
@@ -1437,7 +1437,7 @@ class CandidateParGenerator:
                 data = stats.uniform.rvs(loc=params[0],scale=params[1],size=samples)
 
         except Exception as e: # Catch *all* exceptions.
-            print "\tError generating data using ", dist, " distribution with parameters ",params,"\n\t", sys.exc_info()[0]
+            print("\tError generating data using ", dist, " distribution with parameters ",params,"\n\t", sys.exc_info()[0])
 
         return data
 
@@ -1537,11 +1537,11 @@ class CandidateParGenerator:
         nbins = ceil( rnge / binwidth )
 
         if(self.verbose):
-            print "\t\tFreedman Diaconis Rule values for bins:"
-            print "\t\t\tIQR: ",iqr
-            print "\t\t\tBin Width: ",binwidth
-            print "\t\t\tRange: ",rnge
-            print "\t\t\tNumber of bins: ", nbins
+            print("\t\tFreedman Diaconis Rule values for bins:")
+            print("\t\t\tIQR: ",iqr)
+            print("\t\t\tBin Width: ",binwidth)
+            print("\t\t\tRange: ",rnge)
+            print("\t\t\tNumber of bins: ", nbins)
 
         return int(nbins)
 

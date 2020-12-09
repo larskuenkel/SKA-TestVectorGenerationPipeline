@@ -167,18 +167,18 @@ class InjectPulsarAutomator:
         #   Print command line arguments & Run
         # ****************************************
 
-        print "\n\t**************************"
-        print "\t| Command Line Arguments |"
-        print "\t**************************"
-        print "\tDebug:",self.verbose
-        print "\tCommand file path path:",self.cmdFilePath
-        print "\tOutput directory:", self.outputDir
+        print("\n\t**************************")
+        print("\t| Command Line Arguments |")
+        print("\t**************************")
+        print("\tDebug:",self.verbose)
+        print("\tCommand file path path:",self.cmdFilePath)
+        print("\tOutput directory:", self.outputDir)
 
-        print "\n\tChecking user supplied parameters..."
+        print("\n\tChecking user supplied parameters...")
 
         # Now check the user has supplied an output directory path
         if(not self.outputDir):
-            print "\n\tYou must supply a valid predictor file directory via the --out flag."
+            print("\n\tYou must supply a valid predictor file directory via the --out flag.")
             sys.exit()
 
         # Now the user may have supplied an output directory path, but it may
@@ -189,21 +189,21 @@ class InjectPulsarAutomator:
             try:
                 os.makedirs(self.outputDir)
             except OSError as exception:
-                print "\n\tException encountered trying to create output directory - Exiting!"
+                print("\n\tException encountered trying to create output directory - Exiting!")
                 sys.exit()
 
         # If the directory creation call above did not fail, the output directory
         # should now exist. Check that this is the case...
         if(os.path.isdir(self.outputDir) == False):
-            print "\n\tOutput directory invalid - Exiting!"
+            print("\n\tOutput directory invalid - Exiting!")
             sys.exit()
 
         # Check the command file...
         if(os.path.exists(self.cmdFilePath) == False):
-            print "\n\tYou must supply a valid command file via the --cmd flag."
+            print("\n\tYou must supply a valid command file via the --cmd flag.")
             sys.exit()
 
-        print "\n\tFinished checking supplied parameters..."
+        print("\n\tFinished checking supplied parameters...")
 
         # ****************************************
         #
@@ -215,7 +215,7 @@ class InjectPulsarAutomator:
         #
         # ****************************************
 
-        print "\n\tExecuting inject_pulsar commands..."
+        print("\n\tExecuting inject_pulsar commands...")
         executionCount  = 0
         executionErrors = 0
         copyErrors      = 0
@@ -243,7 +243,7 @@ class InjectPulsarAutomator:
 
                 # Check the command file...
                 if(os.path.exists("output.fil") == False):
-                    print "\n\tExecution ",executionCount , " failed to create output file!"
+                    print("\n\tExecution ",executionCount , " failed to create output file!")
                     executionErrors +=1
                 else:
                     # The output file must exist. So here we move it to the output directory
@@ -283,25 +283,25 @@ class InjectPulsarAutomator:
 
                         # Check the command file...
                         if(os.path.exists(destination) == False):
-                            print "\n\tExecution ",executionCount , " failed to copy output file!"
+                            print("\n\tExecution ",executionCount , " failed to copy output file!")
                             copyErrors +=1
 
                     else:
                         # we just don't know where to move the file... best to delete it to ensure we
                         # don't use up all allocated disk space...
-                        print "Not enough components!"
+                        print("Not enough components!")
                         self.clearFile("output.fil")
 
         # Finally get the time that the procedure finished.
         end = datetime.datetime.now()
 
-        print "\n\tExecutions of inject_pulsar: ", executionCount
-        print "\tExecution errors: ", executionErrors
-        print "\tExecution successes: ", str(executionCount-executionErrors)
-        print "\tCopy errors: ", copyErrors
-        print "\tExecution time: ", str(end - start)
-        print "\n\tDone."
-        print "\t**************************************************************************" # Used only for formatting purposes.
+        print("\n\tExecutions of inject_pulsar: ", executionCount)
+        print("\tExecution errors: ", executionErrors)
+        print("\tExecution successes: ", str(executionCount-executionErrors))
+        print("\tCopy errors: ", copyErrors)
+        print("\tExecution time: ", str(end - start))
+        print("\n\tDone.")
+        print("\t**************************************************************************") # Used only for formatting purposes.
 
     # ****************************************************************************************************
 
